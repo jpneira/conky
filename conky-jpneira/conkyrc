@@ -1,0 +1,95 @@
+-- vim: ts=4 sw=4 noet ai cindent syntax=lua
+
+conky.config = {
+	-- Use double buffering (eliminates flickering)
+	double_buffer = true,
+	text_buffer_size = 2048,
+
+	override_utf8_locale = true,
+
+	-- Run conky in the background
+	background = true,
+  
+	-- Update interval in seconds
+	update_interval = 1.0,
+
+	-- Set to zero to run forever
+	total_run_times = 0,
+
+	-- Subtract file system buffers from used memory
+	no_buffers = true,
+
+	-- Use Xft (anti-aliased font and stuff)
+	use_xft = true,
+	font = 'Droid Sans:size=13',
+	xftalpha = 0.8,
+	uppercase = false,
+ 
+	-- Default color and border settings
+	default_color = 'white',
+	draw_shades = no,
+	draw_outline = no,
+	draw_borders = no,
+	draw_graph_borders = no,
+
+	-- Makes conky window transparent
+	own_window = true,
+	own_window_transparent = true,
+	own_window_type = 'override',
+	own_window_hints = 'undecorated,below,skip_taskbar,sticky,skip_pager',
+  
+	-- Window size and position
+	alignment = 'top_right',
+	minimum_width = 230,
+	maximum_width = 230,
+	border_inner_margin = 5,
+	border_outer_margin = 0,
+	---maximum_height = 690,
+	gap_x = 10,
+	gap_y = 55
+}
+
+conky.text = [[
+### -- CLOCK -- ###
+$alignc${font Zekton:size=62}${time %H:%M}${font}
+${font Droid Sans:style=Bold}${color FF6600}$alignc${time %A}${color}${font} ${time %d %B}
+${hr}
+### -- WEATHER -- ###
+${execi 300 python weather.py}
+# ----------------------------------------- draw icon --- #
+${execi 300 cp -f ~/.conky/Icons/$(grep "^[icon]" ~/.conky/weather.cml | sed 's/icon://g').png ~/.cache/weather.png}${image ~/.cache/weather.png -p 0,125 -s 80x80}
+# ----------------------------------------- current temperature --- #
+${voffset -57}
+${offset 85}${font Droid Sans:size=30}${execi 300 grep "temperature:" ~/.conky/weather.cml | sed 's/temperature://g'}°C${font}
+# ----------------------------------------- apparent temprature --- #
+${voffset -20}
+${offset 85}${font Droid Sans:style=Bold:size=12}${color FF6600}Sensación:${color} ${execi 300 grep "feel:" ~/.conky/weather.cml | sed 's/feel://g'}°${font}
+# ----------------------------------------- min and max temperatures, humidity and wind --- #
+${voffset -10}
+${offset 15}${font Droid Sans:style=Bold:size=10.5}Minima:${font}${voffset -4} ${font Droid Sans:size=10.5}${execi 300 grep "1_minTemp:" ~/.conky/weather.cml | sed 's/1_minTemp://g'}°${font}${voffset -7}
+${offset 15}${font Droid Sans:style=Bold:size=10.5}Máxima:${font}${voffset -4} ${font Droid Sans:size=10.5}${execi 300 grep "1_maxTemp:" ~/.conky/weather.cml | sed 's/1_maxTemp://g'}°${font}${voffset -7}
+${offset 15}${font Droid Sans:style=Bold:size=10.5}Humedad:${font}${voffset -4} ${font Droid Sans:size=10.5}${execi 300 grep "humidity:" ~/.conky/weather.cml | sed 's/humidity://g'}%${font}${voffset -7}
+${offset 15}${font Droid Sans:style=Bold:size=10.5}Viento:${font}${voffset -4} ${font Droid Sans:size=10.5}${execi 300 grep "wind:" ~/.conky/weather.cml | sed 's/wind://g'} Km/h${font}${voffset}
+# ----------------------------------------- day 2 --- #
+${voffset}
+${execi 300 cp -f ~/.conky/Icons/$(grep "2_icon:" ~/.conky/weather.cml | sed 's/2_icon://g').png ~/.cache/weather-2.png}${image ~/.cache/weather-2.png -p 0,280 -s 40x40}
+${voffset -53}${font Droid Sans:size=10.5}
+${offset 45}${execi 300 grep "2_minTemp:" ~/.conky/weather.cml | sed 's/2_minTemp://g'}° / ${execi 300 grep "2_maxTemp:" ~/.conky/weather.cml | sed 's/2_maxTemp://g'}°${font}
+${voffset -30}
+${offset 45}${font Droid Sans:size=7}${execi 300 grep "2_summary:" ~/.conky/weather.cml | sed 's/2_summary://g'}${font}
+# ----------------------------------------- day 3 --- #
+${execi 300 cp -f ~/.conky/Icons/$(grep "3_icon:" ~/.conky/weather.cml | sed 's/3_icon://g').png ~/.cache/weather-3.png}${image ~/.cache/weather-3.png -p 0,320 -s 40x40}
+${voffset -35}${font Droid Sans:size=10.5}
+${offset 45}${execi 300 grep "3_minTemp:" ~/.conky/weather.cml | sed 's/3_minTemp://g'}° / ${execi 300 grep "3_maxTemp:" ~/.conky/weather.cml | sed 's/3_maxTemp://g'}°${font}
+${voffset -30}
+${offset 45}${font Droid Sans:size=7}${execi 300 grep "3_summary:" ~/.conky/weather.cml | sed 's/3_summary://g'}${font}
+# ----------------------------------------- day 4 --- #
+${execi 300 cp -f ~/.conky/Icons/$(grep "4_icon:" ~/.conky/weather.cml | sed 's/4_icon://g').png ~/.cache/weather-4.png}${image ~/.cache/weather-4.png -p 0,365 -s 40x40}
+${voffset -35}${font Droid Sans:size=10.5}
+${offset 45}${execi 300 grep "4_minTemp:" ~/.conky/weather.cml | sed 's/4_minTemp://g'}° / ${execi 300 grep "4_maxTemp:" ~/.conky/weather.cml | sed 's/4_maxTemp://g'}°${font}
+${voffset -30}
+${offset 45}${font Droid Sans:size=7}${execi 300 grep "4_summary:" ~/.conky/weather.cml | sed 's/4_summary://g'}
+# ----------------------------------------- update at --- #
+${voffset}
+$alignr Actualizado el: ${execi 300 grep "update_at:" ~/.conky/weather.cml | sed 's/update_at://g'}${font}
+]]

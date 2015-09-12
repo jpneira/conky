@@ -1,0 +1,5 @@
+weather:
+    key: # your api key here
+    latitude: -33.4500
+    longitude: -70.6667
+    units: ca
