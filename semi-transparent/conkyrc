@@ -1,0 +1,65 @@
+alignment top_left
+background yes
+border_marin 0
+border_width 0
+default_color ffffff
+double_buffer yes
+draw_borders no
+draw_outline no
+draw_shades yes
+gap_x 0
+gap_y 250
+maximum_width 1024
+minimum_size 1024
+no_buffers yes
+override_utf8_locale yes
+own_window yes
+own_window_title conky
+own_window_hints undecorated,below,sticky,skip_taskbar,skip_pager
+own_window_transparent yes
+own_window_colour 000000
+own_window_type override
+text_buffer_size 8000
+total_run_times 0
+update_interval 2.0
+uppercase no
+use_xft yes
+xftalpha 1
+xftfont Droid Sans:pixelsize=12
+default_bar_size 410 5
+lua_load draw_bg.lua
+lua_draw_hook_pre draw_bg
+
+TEXT
+${offset 70}${font Zekton:pixelsize=87}${time %H:%M}${font}
+${offset 70}${font Droid Sans:pixelsize=20}${voffset 10}${time  %B %d, %Y}
+${offset 70}${time %A}${font}
+${voffset -125}
+${font Monospace:size=10}${execpi 60 gcal -i --starting-day=monday | sed -e 's/vi/vi /'| sed -e 1,2d -e 's/^/${offset 342}/g;s/Mo/${font Monospace:size=10:bold}Mo/g;s/Su/Su${font}${font Monospace:size=10}/g;s/</ ${color orange}/g;s/>/${color} /g'}${font}
+# TEMP + RAM
+${voffset -110}
+${offset 570}${font StyleBats:size=14}A${font}
+${voffset -40}
+${offset 595}Temp: $acpitemp°C
+${voffset -7}
+${offset 595}RAM: $mem
+# CPU'S
+${voffset -40}
+${offset 720}${font StyleBats:size=14}i${font}
+${voffset -40}
+${offset 745}CPU1: ${cpu cpu1}%
+${voffset -7}
+${offset 745}CPU2: ${cpu cpu2}%
+#HDD
+${voffset -40}
+${offset 870}${font StyleBats:size=14}g${font}
+${voffset -40}
+${offset 895}Root: ${fs_used /}
+${voffset -7}
+${offset 895}Home: ${fs_used /home}
+# MOC
+${voffset}
+${offset 570}${exec mocp -Q %artist} - ${exec mocp -Q %song}
+${offset 570}${execbar echo $((`mocp -Q %cs'*100/'%ts`))}
+${offset 570}${exec mocp -Q %ct} / ${exec mocp -Q %tt}
+${voffset}
